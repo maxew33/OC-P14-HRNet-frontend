@@ -8,7 +8,9 @@ const CreateEmployee: React.FC = () => {
             <Header />
             <main data-testid="createEmployee">
                 hello createEmployee
-                <NavLink to="/view">voir les employés</NavLink>
+                <NavLink data-testid="link" to="/view">
+                    voir les employés
+                </NavLink>
             </main>
         </>
     )

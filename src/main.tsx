@@ -3,21 +3,16 @@ import ReactDOM from 'react-dom/client'
 import './style/style.css'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 
-import CreateEmployee from './pages/CreateEmployee/CreateEmployee'
-import ViewEmployees from './pages/ViewEmployees/ViewEmployees'
+import routesConfig from './routes/routesConfig'
 
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <CreateEmployee/>
-  },
-  {
-    path: "/view",
-    element: <ViewEmployees/>
-  }
-])
+const rootElement = document.getElementById('root');
+if (!rootElement) {
+  throw new Error("Root element with ID 'root' not found");
+}
 
-ReactDOM.createRoot(document.getElementById('root')!).render(
+const router = createBrowserRouter(routesConfig)
+
+ReactDOM.createRoot(rootElement).render(
   <React.StrictMode>
     <RouterProvider router={router}/>
   </React.StrictMode>,
