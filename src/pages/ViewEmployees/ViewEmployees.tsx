@@ -1,11 +1,9 @@
 import React from 'react'
-import Header from '../components/Header'
+import Header from '../../components/Header/Header'
 
 import { NavLink } from 'react-router-dom'
 
-interface viewEmployeesProps {}
-
-const ViewEmployees: React.FC<viewEmployeesProps> = () => {
+const ViewEmployees: React.FC= () => {
     return (
         <>
             <Header />

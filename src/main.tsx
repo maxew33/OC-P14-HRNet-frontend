@@ -1,10 +1,10 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import './index.css'
+import './style/style.css'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 
-import CreateEmployee from './pages/CreateEmployee'
-import ViewEmployees from './pages/ViewEmployees'
+import CreateEmployee from './pages/CreateEmployee/CreateEmployee'
+import ViewEmployees from './pages/ViewEmployees/ViewEmployees'
 
 const router = createBrowserRouter([
   {
