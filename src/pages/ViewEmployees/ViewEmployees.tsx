@@ -8,10 +8,13 @@ const ViewEmployees: React.FC = () => {
         <>
             <Header />
             <main data-testid="viewEmployees">
-                hello viewEmployees
-                <NavLink to="/" data-testid="link">
-                    Créer un employé
+                <NavLink to="/" data-testid="link" className="link">
+                    Create employee
                 </NavLink>
+                <div className="content-wrapper">
+                    <h2 className="wrapper-title">View employees</h2>
+                    tableau
+                </div>
             </main>
         </>
     )
