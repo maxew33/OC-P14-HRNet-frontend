@@ -1,6 +1,6 @@
 @import '../utils/variables';
 
-form.content-wrapper{
+form.content-wrapper {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     grid-template-areas:
@@ -8,7 +8,7 @@ form.content-wrapper{
         'id address address'
         'id address address'
         'work work save';
-        gap: 1rem;
+    gap: 1rem;
 }
 
 .input-wrapper {
@@ -29,12 +29,13 @@ form.content-wrapper{
     input {
         border: none;
         border-bottom: 2px solid $mediumGreen;
+        height: 1rem;
     }
 }
 
-.inputs-wrapper{
+.inputs-wrapper {
     display: flex;
-    align-items: center;    
+    align-items: center;
 }
 
 .id-infos {
@@ -52,11 +53,11 @@ form.content-wrapper{
     border-radius: 1.5rem;
     padding: 2.5rem 0 1rem 0;
     gap: 1rem;
-    &::after{
-        content:"Address";
+    &::after {
+        content: 'Address';
         position: absolute;
         font-size: 1.5rem;
-        top: .5rem;
+        top: 0.5rem;
         left: 1rem;
     }
 }
@@ -66,18 +67,48 @@ form.content-wrapper{
     justify-content: space-around;
 }
 
-.save-btn {
+.create-btn {
     grid-area: save;
     border: 4px solid $darkGreen;
     background: $lightGreen;
     color: $darkGreen;
-    font-size:2rem;
+    font-size: 2rem;
     font-family: $font1;
     text-transform: capitalize;
     border-radius: 1.25rem;
     cursor: pointer;
-    &:hover{
+    &:hover {
         background: $darkGreen;
         color: $grey;
     }
+}
+
+.confirm-modal {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: $greyFilter;
+    backdrop-filter: blur(5px);
+    display: grid;
+    place-content: center;
+}
+
+.confirm-modal-wrapper {
+    font-size: 1.5rem;
+    gap:1.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    line-height: 1.5;
+    padding: 2.5rem 5rem;
+    border: 5px solid $darkGreen;
+    border-radius: 1.5rem;
+    background: white;
+}
+
+.error{
+    color:red;
 }

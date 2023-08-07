@@ -1,40 +1,109 @@
 import React, { FormEvent, useState } from 'react'
 import Header from '../../components/Header/Header'
 import { NavLink } from 'react-router-dom'
+import Dropdown from '../../components/Dropdown/Dropdown'
+import { department, usStates } from '../../data/dropdownsData'
 
 const CreateEmployee: React.FC = () => {
     interface dataFormat {
-        firstName: string
-        lastName: string
-        birthday: number
-        street: string
-        city: string
-        state: string
-        zipCode: number
-        startDate: number
-        department: string
+        firstName: string | null
+        lastName: string | null
+        birthday: number | null
+        street: string | null
+        city: string | null
+        state: string | null
+        zipCode: number | null
+        startDate: number | null
+        department: string | null
+    }
+
+    interface dataValidation {
+        firstName: boolean
+        lastName: boolean
+        startDate: boolean
+        department: boolean
+        birthday: boolean
+        street: boolean
+        city: boolean
+        state: boolean
+        zipCode: boolean
     }
 
     const [inputData, setInputData] = useState<dataFormat>({
-        firstName: '',
-        lastName: '',
-        startDate: 0,
-        department: '',
-        birthday: 0,
-        street: '',
-        city: '',
-        state: '',
-        zipCode: 0,
+        firstName: null,
+        lastName: null,
+        startDate: null,
+        department: null,
+        birthday: null,
+        street: null,
+        city: null,
+        state: null,
+        zipCode: null,
     })
+
+    const [formSubmitted, setFormSubmitted] = useState(false)
+
+    const [dataValidation, setDataValidation] = useState<dataValidation>({
+        firstName: false,
+        lastName: false,
+        startDate: false,
+        department: false,
+        birthday: false,
+        street: false,
+        city: false,
+        state: false,
+        zipCode: false,
+    })
+
+    const [dataAdded, setDataAdded] = useState(false)
 
     const handleInput = (e: FormEvent, id: string) => {
         const target = e.target as HTMLFormElement
         setInputData({ ...inputData, [id]: target.value })
     }
 
+    const selectItem = (id: string, value: string) => {
+        setInputData({ ...inputData, [id]: value })
+    }
+
     const handleSubmit = (e: FormEvent) => {
         e.preventDefault()
-        console.log(inputData)
+
+        const finalValidation: boolean[] = []
+        const updatedValidationData: Partial<dataValidation> = {}
+
+        // verif les données
+        for (const key in inputData) {
+            console.log(key)
+            const validated = inputData[key as keyof dataFormat] ? true : false
+            updatedValidationData[key as keyof dataValidation] = validated
+            finalValidation.push(validated)
+        }
+
+        setDataValidation({ ...dataValidation, ...updatedValidationData })
+        finalValidation.every((value) => value === true) && setDataAdded(true)
+
+        setFormSubmitted(true)
+    }
+
+    const handleConfirm = (e: FormEvent) => {
+        e.preventDefault()
+
+        setInputData({
+            firstName: null,
+            lastName: null,
+            startDate: null,
+            department: null,
+            birthday: null,
+            street: null,
+            city: null,
+            state: null,
+            zipCode: null,
+        })
+
+        setFormSubmitted(false)
+
+        setDataAdded(false)
     }
 
     return (
@@ -47,9 +116,17 @@ const CreateEmployee: React.FC = () => {
                 <form className="content-wrapper">
                     <h2 className="wrapper-title">Create employee</h2>
                     <div className="inputs-wrapper id-infos">
-                        <div className="input-wrapper">
+                        <div
+                            className={
+                                'input-wrapper' +
+                                (formSubmitted && !dataValidation.firstName
+                                    ? ' error'
+                                    : '')
+                            }
+                        >
                             <label htmlFor="firstName"> First name : </label>
                             <input
+                                value={inputData.firstName ?? ''}
                                 type="text"
                                 name=""
                                 id="firstName"
@@ -57,9 +134,17 @@ const CreateEmployee: React.FC = () => {
                                 required
                             />
                         </div>
-                        <div className="input-wrapper">
+                        <div
+                            className={
+                                'input-wrapper' +
+                                (formSubmitted && !dataValidation.lastName
+                                    ? ' error'
+                                    : '')
+                            }
+                        >
                             <label htmlFor="lastName"> Last name : </label>
                             <input
+                                value={inputData.lastName ?? ''}
                                 type="text"
                                 name=""
                                 id="lastName"
@@ -67,9 +152,17 @@ const CreateEmployee: React.FC = () => {
                                 required
                             />
                         </div>
-                        <div className="input-wrapper">
+                        <div
+                            className={
+                                'input-wrapper' +
+                                (formSubmitted && !dataValidation.birthday
+                                    ? ' error'
+                                    : '')
+                            }
+                        >
                             <label htmlFor="birthdate"> Date of birth : </label>
                             <input
+                                value={inputData.birthday ?? ''}
                                 type="text"
                                 name=""
                                 id="birthdate"
@@ -79,9 +172,17 @@ const CreateEmployee: React.FC = () => {
                         </div>
                     </div>
                     <div className="inputs-wrapper address-infos">
-                        <div className="input-wrapper">
+                        <div
+                            className={
+                                'input-wrapper' +
+                                (formSubmitted && !dataValidation.street
+                                    ? ' error'
+                                    : '')
+                            }
+                        >
                             <label htmlFor="street">Street : </label>
                             <input
+                                value={inputData.street ?? ''}
                                 type="text"
                                 name=""
                                 id="street"
@@ -89,9 +190,17 @@ const CreateEmployee: React.FC = () => {
                                 required
                             />
                         </div>
-                        <div className="input-wrapper">
+                        <div
+                            className={
+                                'input-wrapper' +
+                                (formSubmitted && !dataValidation.city
+                                    ? ' error'
+                                    : '')
+                            }
+                        >
                             <label htmlFor="city">City : </label>
                             <input
+                                value={inputData.city ?? ''}
                                 type="text"
                                 name=""
                                 id="city"
@@ -99,19 +208,32 @@ const CreateEmployee: React.FC = () => {
                                 required
                             />
                         </div>
-                        <div className="input-wrapper">
-                            <label htmlFor="state">State : </label>
-                            <input
-                                type="text"
-                                name=""
-                                id="state"
-                                onInput={(e) => handleInput(e, 'state')}
-                                required
+                        <div
+                            className={
+                                'input-wrapper' +
+                                (formSubmitted && !dataValidation.state
+                                    ? ' error'
+                                    : '')
+                            }
+                        >
+                            <Dropdown
+                                currentValue={inputData.state}
+                                items={usStates}
+                                dataId="state"
+                                selectItem={selectItem}
                             />
                         </div>
-                        <div className="input-wrapper">
+                        <div
+                            className={
+                                'input-wrapper' +
+                                (formSubmitted && !dataValidation.zipCode
+                                    ? ' error'
+                                    : '')
+                            }
+                        >
                             <label htmlFor="zip">Zip code : </label>
                             <input
+                                value={inputData.zipCode ?? ''}
                                 type="text"
                                 name=""
                                 id="zip"
@@ -121,9 +243,17 @@ const CreateEmployee: React.FC = () => {
                         </div>
                     </div>
                     <div className="inputs-wrapper work-infos">
-                        <div className="input-wrapper">
+                        <div
+                            className={
+                                'input-wrapper' +
+                                (formSubmitted && !dataValidation.startDate
+                                    ? ' error'
+                                    : '')
+                            }
+                        >
                             <label htmlFor="start">Start date : </label>
                             <input
+                                value={inputData.startDate ?? ''}
                                 type="text"
                                 name=""
                                 id="start"
@@ -131,19 +261,40 @@ const CreateEmployee: React.FC = () => {
                                 required
                             />
                         </div>
-                        <div className="input-wrapper">
-                            <label htmlFor="dep">Department : </label>
-                            <input
-                                type="text"
-                                name=""
-                                id="dep"
-                                onInput={(e) => handleInput(e, 'department')}
-                                required
+                        <div
+                            className={
+                                'input-wrapper' +
+                                (formSubmitted && !dataValidation.department
+                                    ? ' error'
+                                    : '')
+                            }
+                        >
+                            <Dropdown
+                                currentValue={inputData.department}
+                                items={department}
+                                dataId="department"
+                                selectItem={selectItem}
                             />
                         </div>
                     </div>
-                    <button onClick={handleSubmit} className='save-btn'>save</button>
+                    <button onClick={handleSubmit} className="create-btn">
+                        save
+                    </button>
                 </form>
+                {dataAdded && (
+                    <div className="confirm-modal">
+                        <div className="confirm-modal-wrapper">
+                            {inputData.firstName} {inputData.lastName} <br />
+                            has been added
+                            <button
+                                className="create-btn"
+                                onClick={handleConfirm}
+                            >
+                                OK
+                            </button>
+                        </div>
+                    </div>
+                )}
             </main>
         </>
     )
