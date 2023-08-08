@@ -3,32 +3,12 @@ import Header from '../../components/Header/Header'
 import { NavLink } from 'react-router-dom'
 import Dropdown from '../../components/Dropdown/Dropdown'
 import { department, usStates } from '../../data/dropdownsData'
+import { dataFormat, dataValidation } from '../../types/datatTypes'
+import { employeesAtom } from '../../main'
+import { useAtom } from 'jotai'
 
 const CreateEmployee: React.FC = () => {
-    interface dataFormat {
-        firstName: string | null
-        lastName: string | null
-        birthday: number | null
-        street: string | null
-        city: string | null
-        state: string | null
-        zipCode: number | null
-        startDate: number | null
-        department: string | null
-    }
-
-    interface dataValidation {
-        firstName: boolean
-        lastName: boolean
-        startDate: boolean
-        department: boolean
-        birthday: boolean
-        street: boolean
-        city: boolean
-        state: boolean
-        zipCode: boolean
-    }
-
+    
     const [inputData, setInputData] = useState<dataFormat>({
         firstName: null,
         lastName: null,
@@ -56,6 +36,8 @@ const CreateEmployee: React.FC = () => {
     })
 
     const [dataAdded, setDataAdded] = useState(false)
+
+    const [employees, setEmployees] = useAtom(employeesAtom)
 
     const handleInput = (e: FormEvent, id: string) => {
         const target = e.target as HTMLFormElement
@@ -88,6 +70,8 @@ const CreateEmployee: React.FC = () => {
 
     const handleConfirm = (e: FormEvent) => {
         e.preventDefault()
+
+        setEmployees([...employees, inputData])
 
         setInputData({
             firstName: null,
