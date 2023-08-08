@@ -40,21 +40,21 @@ const CreateEmployee: React.FC = () => {
 
     const [employees, setEmployees] = useAtom(employeesAtom)
 
-    useEffect(() => {
-        if (employees.length === 0) {
-            const fetchData = async () => {
-                const url = ''
+    // useEffect(() => {
+    //     if (employees.length === 0) {
+    //         const fetchData = async () => {
+    //             const url = ''
 
-                const callData = new CallData(url)
+    //             const callData = new CallData(url)
 
-                const employeesData = await callData.getEmployeesData()
+    //             const employeesData = await callData.getEmployeesData()
 
-                setEmployees([...employees, ...employeesData])
-            }
+    //             setEmployees([...employees, ...employeesData])
+    //         }
 
-            fetchData()
-        }
-    }, [])
+    //         fetchData()
+    //     }
+    // }, [])
 
     const handleInput = (e: FormEvent, id: string) => {
         const target = e.target as HTMLFormElement

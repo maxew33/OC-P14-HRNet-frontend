@@ -21,6 +21,8 @@ const ViewEmployees: React.FC = () => {
         zipCode: 'Zip Code',
     }
 
+    console.log(employees)
+
     return (
         <>
             <Header />

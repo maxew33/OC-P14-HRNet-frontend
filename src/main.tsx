@@ -7,18 +7,17 @@ import routesConfig from './routes/routesConfig'
 
 import { atom } from 'jotai'
 import { dataFormat } from './types/datatTypes'
+import { App } from './App'
 
 const rootElement = document.getElementById('root')
 if (!rootElement) {
     throw new Error("Root element with ID 'root' not found")
 }
 
-const router = createBrowserRouter(routesConfig)
-
 export const employeesAtom = atom<dataFormat[]>([])
 
 ReactDOM.createRoot(rootElement).render(
     <React.StrictMode>
-        <RouterProvider router={router} />
+        <App/>
     </React.StrictMode>
 )
