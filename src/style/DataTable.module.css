@@ -1,0 +1,7 @@
+.table {
+  border: 2px solid red;
+  width: 100%;
+}
+.table th, .table td {
+  border: 1px solid green;
+}/*# sourceMappingURL=DataTable.module.css.map */
