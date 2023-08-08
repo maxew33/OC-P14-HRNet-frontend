@@ -10,7 +10,7 @@ export interface dataFormat {
     department: string | null
 }
 
-export interface dataValidation {
+export interface dataValidationType {
     firstName: boolean
     lastName: boolean
     startDate: boolean

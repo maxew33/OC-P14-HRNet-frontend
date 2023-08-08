@@ -29,22 +29,8 @@ const ViewEmployees: React.FC = () => {
                     Create employee
                 </NavLink>
                 <div className="content-wrapper">
-                    <DataTable headingNames={names} data={employees} />
                     <h2 className="wrapper-title">View employees</h2>
-                    tableau avec <br />
-                    {employees.map((employee, idx) => (
-                        <div key={idx}>
-                            <span>{employee.lastName}</span> -{' '}
-                            <span>{employee.firstName}</span> -{' '}
-                            <span>{employee.birthday}</span> -{' '}
-                            <span>{employee.street}</span> -{' '}
-                            <span>{employee.city}</span> -{' '}
-                            <span>{employee.state}</span> -{' '}
-                            <span>{employee.zipCode}</span> -{' '}
-                            <span>{employee.department}</span> -{' '}
-                            <span>{employee.startDate}</span> - <br />
-                        </div>
-                    ))}
+                    <DataTable headingNames={names} data={employees} />
                 </div>
             </main>
         </>

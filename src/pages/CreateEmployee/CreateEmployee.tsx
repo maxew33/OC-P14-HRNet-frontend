@@ -1,14 +1,15 @@
-import React, { FormEvent, useState } from 'react'
+import React, { FormEvent, useEffect, useState } from 'react'
 import Header from '../../components/Header/Header'
 import { NavLink } from 'react-router-dom'
 import Dropdown from '../../components/Dropdown/Dropdown'
 import { department, usStates } from '../../data/dropdownsData'
-import { dataFormat, dataValidation } from '../../types/datatTypes'
+import { dataFormat, dataValidationType } from '../../types/datatTypes'
 import { employeesAtom } from '../../main'
 import { useAtom } from 'jotai'
+import CallData from '../../CallData/CallData'
 
 const CreateEmployee: React.FC = () => {
-    
+
     const [inputData, setInputData] = useState<dataFormat>({
         firstName: null,
         lastName: null,
@@ -23,7 +24,7 @@ const CreateEmployee: React.FC = () => {
 
     const [formSubmitted, setFormSubmitted] = useState(false)
 
-    const [dataValidation, setDataValidation] = useState<dataValidation>({
+    const [dataValidation, setDataValidation] = useState<dataValidationType>({
         firstName: false,
         lastName: false,
         startDate: false,
@@ -39,6 +40,22 @@ const CreateEmployee: React.FC = () => {
 
     const [employees, setEmployees] = useAtom(employeesAtom)
 
+    useEffect(() => {
+        if (employees.length === 0) {
+            const fetchData = async () => {
+                const url = ''
+
+                const callData = new CallData(url)
+
+                const employeesData = await callData.getEmployeesData()
+
+                setEmployees([...employees, ...employeesData])
+            }
+
+            fetchData()
+        }
+    }, [])
+
     const handleInput = (e: FormEvent, id: string) => {
         const target = e.target as HTMLFormElement
         setInputData({ ...inputData, [id]: target.value })
@@ -52,13 +69,12 @@ const CreateEmployee: React.FC = () => {
         e.preventDefault()
 
         const finalValidation: boolean[] = []
-        const updatedValidationData: Partial<dataValidation> = {}
+        const updatedValidationData: Partial<dataValidationType> = {}
 
         // verif les données
         for (const key in inputData) {
-            console.log(key)
             const validated = inputData[key as keyof dataFormat] ? true : false
-            updatedValidationData[key as keyof dataValidation] = validated
+            updatedValidationData[key as keyof dataValidationType] = validated
             finalValidation.push(validated)
         }
 
@@ -147,7 +163,7 @@ const CreateEmployee: React.FC = () => {
                             <label htmlFor="birthdate"> Date of birth : </label>
                             <input
                                 value={inputData.birthday ?? ''}
-                                type="text"
+                                type="date"
                                 name=""
                                 id="birthdate"
                                 onInput={(e) => handleInput(e, 'birthday')}
@@ -238,7 +254,7 @@ const CreateEmployee: React.FC = () => {
                             <label htmlFor="start">Start date : </label>
                             <input
                                 value={inputData.startDate ?? ''}
-                                type="text"
+                                type="date"
                                 name=""
                                 id="start"
                                 onInput={(e) => handleInput(e, 'startDate')}
