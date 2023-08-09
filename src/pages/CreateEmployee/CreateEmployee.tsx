@@ -6,10 +6,13 @@ import { department, usStates } from '../../data/dropdownsData'
 import { dataFormat, dataValidationType } from '../../types/datatTypes'
 import { employeesAtom } from '../../main'
 import { useAtom } from 'jotai'
-import CallData from '../../CallData/CallData'
+import { MessageModal } from '../../components/MessageModal'
 
 const CreateEmployee: React.FC = () => {
+    // get / set the data from the global state
+    const [employees, setEmployees] = useAtom(employeesAtom)
 
+    // get / set the data from the form
     const [inputData, setInputData] = useState<dataFormat>({
         firstName: null,
         lastName: null,
@@ -22,39 +25,24 @@ const CreateEmployee: React.FC = () => {
         zipCode: null,
     })
 
-    const [formSubmitted, setFormSubmitted] = useState(false)
+    // when the form is submitted, check if the form are correctly filled
+    
+    const [dataSubmitted, setDataSubmitted] = useState(false)
 
     const [dataValidation, setDataValidation] = useState<dataValidationType>({
-        firstName: false,
-        lastName: false,
-        startDate: false,
-        department: false,
-        birthday: false,
-        street: false,
-        city: false,
-        state: false,
-        zipCode: false,
+        firstName: true,
+        lastName: true,
+        startDate: true,
+        department: true,
+        birthday: true,
+        street: true,
+        city: true,
+        state: true,
+        zipCode: true,
     })
 
-    const [dataAdded, setDataAdded] = useState(false)
+    const [dataValidated, setDataValidated] = useState(false)
 
-    const [employees, setEmployees] = useAtom(employeesAtom)
-
-    // useEffect(() => {
-    //     if (employees.length === 0) {
-    //         const fetchData = async () => {
-    //             const url = ''
-
-    //             const callData = new CallData(url)
-
-    //             const employeesData = await callData.getEmployeesData()
-
-    //             setEmployees([...employees, ...employeesData])
-    //         }
-
-    //         fetchData()
-    //     }
-    // }, [])
 
     const handleInput = (e: FormEvent, id: string) => {
         const target = e.target as HTMLFormElement
@@ -65,13 +53,12 @@ const CreateEmployee: React.FC = () => {
         setInputData({ ...inputData, [id]: value })
     }
 
-    const handleSubmit = (e: FormEvent) => {
+    const handleSubmit = async (e: FormEvent) => {
         e.preventDefault()
 
         const finalValidation: boolean[] = []
         const updatedValidationData: Partial<dataValidationType> = {}
 
-        // verif les données
         for (const key in inputData) {
             const validated = inputData[key as keyof dataFormat] ? true : false
             updatedValidationData[key as keyof dataValidationType] = validated
@@ -79,15 +66,24 @@ const CreateEmployee: React.FC = () => {
         }
 
         setDataValidation({ ...dataValidation, ...updatedValidationData })
-        finalValidation.every((value) => value === true) && setDataAdded(true)
 
-        setFormSubmitted(true)
+        finalValidation.every((value) => value === true)
+            ? validateData()
+            : setDataSubmitted(true)
     }
 
-    const handleConfirm = (e: FormEvent) => {
-        e.preventDefault()
-
+    //data are validated => update the global state
+    const validateData = async () => {
         setEmployees([...employees, inputData])
+
+        setDataValidated(true)
+
+        setDataSubmitted(true)
+    }
+
+    const clearData = () => {
+
+        setDataValidated(false)
 
         setInputData({
             firstName: null,
@@ -101,9 +97,25 @@ const CreateEmployee: React.FC = () => {
             zipCode: null,
         })
 
-        setFormSubmitted(false)
+        setDataValidation({
+            firstName: true,
+            lastName: true,
+            startDate: true,
+            department: true,
+            birthday: true,
+            street: true,
+            city: true,
+            state: true,
+            zipCode: true,
+        })
+    }
 
-        setDataAdded(false)
+    const handleConfirm = (e: FormEvent) => {
+        e.preventDefault()
+
+        dataValidated && clearData()
+
+        setDataSubmitted(false)
     }
 
     return (
@@ -119,9 +131,7 @@ const CreateEmployee: React.FC = () => {
                         <div
                             className={
                                 'input-wrapper' +
-                                (formSubmitted && !dataValidation.firstName
-                                    ? ' error'
-                                    : '')
+                                (!dataValidation.firstName ? ' error' : '')
                             }
                         >
                             <label htmlFor="firstName"> First name : </label>
@@ -137,9 +147,7 @@ const CreateEmployee: React.FC = () => {
                         <div
                             className={
                                 'input-wrapper' +
-                                (formSubmitted && !dataValidation.lastName
-                                    ? ' error'
-                                    : '')
+                                (!dataValidation.lastName ? ' error' : '')
                             }
                         >
                             <label htmlFor="lastName"> Last name : </label>
@@ -155,9 +163,7 @@ const CreateEmployee: React.FC = () => {
                         <div
                             className={
                                 'input-wrapper' +
-                                (formSubmitted && !dataValidation.birthday
-                                    ? ' error'
-                                    : '')
+                                (!dataValidation.birthday ? ' error' : '')
                             }
                         >
                             <label htmlFor="birthdate"> Date of birth : </label>
@@ -175,9 +181,7 @@ const CreateEmployee: React.FC = () => {
                         <div
                             className={
                                 'input-wrapper' +
-                                (formSubmitted && !dataValidation.street
-                                    ? ' error'
-                                    : '')
+                                (!dataValidation.street ? ' error' : '')
                             }
                         >
                             <label htmlFor="street">Street : </label>
@@ -193,9 +197,7 @@ const CreateEmployee: React.FC = () => {
                         <div
                             className={
                                 'input-wrapper' +
-                                (formSubmitted && !dataValidation.city
-                                    ? ' error'
-                                    : '')
+                                (!dataValidation.city ? ' error' : '')
                             }
                         >
                             <label htmlFor="city">City : </label>
@@ -211,24 +213,20 @@ const CreateEmployee: React.FC = () => {
                         <div
                             className={
                                 'input-wrapper' +
-                                (formSubmitted && !dataValidation.state
-                                    ? ' error'
-                                    : '')
+                                (!dataValidation.state ? ' error' : '')
                             }
                         >
                             <Dropdown
                                 currentValue={inputData.state}
                                 items={usStates}
-                                dataId="state"
+                                dataName="state"
                                 selectItem={selectItem}
                             />
                         </div>
                         <div
                             className={
                                 'input-wrapper' +
-                                (formSubmitted && !dataValidation.zipCode
-                                    ? ' error'
-                                    : '')
+                                (!dataValidation.zipCode ? ' error' : '')
                             }
                         >
                             <label htmlFor="zip">Zip code : </label>
@@ -246,9 +244,7 @@ const CreateEmployee: React.FC = () => {
                         <div
                             className={
                                 'input-wrapper' +
-                                (formSubmitted && !dataValidation.startDate
-                                    ? ' error'
-                                    : '')
+                                (!dataValidation.startDate ? ' error' : '')
                             }
                         >
                             <label htmlFor="start">Start date : </label>
@@ -264,15 +260,13 @@ const CreateEmployee: React.FC = () => {
                         <div
                             className={
                                 'input-wrapper' +
-                                (formSubmitted && !dataValidation.department
-                                    ? ' error'
-                                    : '')
+                                (!dataValidation.department ? ' error' : '')
                             }
                         >
                             <Dropdown
                                 currentValue={inputData.department}
                                 items={department}
-                                dataId="department"
+                                dataName="department"
                                 selectItem={selectItem}
                             />
                         </div>
@@ -281,19 +275,15 @@ const CreateEmployee: React.FC = () => {
                         save
                     </button>
                 </form>
-                {dataAdded && (
-                    <div className="confirm-modal">
-                        <div className="confirm-modal-wrapper">
-                            {inputData.firstName} {inputData.lastName} <br />
-                            has been added
-                            <button
-                                className="create-btn"
-                                onClick={handleConfirm}
-                            >
-                                OK
-                            </button>
-                        </div>
-                    </div>
+                {dataSubmitted && (
+                    <MessageModal
+                        message={
+                            dataValidated
+                                ? `${inputData.firstName} ${inputData.lastName} has been added`
+                                : `red field${Object.values(dataValidation).filter((value) => value === false).length > 1 ? 's' : ''} ${Object.values(dataValidation).filter((value) => value === false).length > 1 ? 'were' : 'was'} not filled properly.`
+                        }
+                        confirm={handleConfirm}
+                    />
                 )}
             </main>
         </>
