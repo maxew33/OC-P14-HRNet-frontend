@@ -2,9 +2,6 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import './style/style.css'
 
-import { createBrowserRouter, RouterProvider } from 'react-router-dom'
-import routesConfig from './routes/routesConfig'
-
 import { atom } from 'jotai'
 import { dataFormat } from './types/datatTypes'
 import { App } from './App'

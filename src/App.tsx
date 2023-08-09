@@ -5,7 +5,6 @@ import { useEffect } from "react"
 import CallData from "./CallData/CallData"
 import { employeesAtom } from "./main"
 
-
 export const App = () => {
     
 const router = createBrowserRouter(routesConfig)

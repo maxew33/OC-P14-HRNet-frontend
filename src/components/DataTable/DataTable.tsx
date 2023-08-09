@@ -18,7 +18,7 @@ export const DataTable: React.FC<DataTableProps> = (props) => {
         ? Object.keys(props.headingNames)
         : []
 
-    //check if headingNames.keys and data keys are the same
+    //check if headingNames keys and data keys are the same
     if (props.headingNames) {
 
         const dataKeysToCompare = props.data.length > 0 ? Object.keys(props.data[0]) : [];
