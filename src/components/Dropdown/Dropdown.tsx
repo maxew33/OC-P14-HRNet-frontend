@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 
 interface DropdownProps {
-    currentValue: string | null
+    currentValue?: string | null
     items: (number | string)[]
-    dataId: string
+    dataName?: string
     selectItem: (id: string, value: string) => void
 }
 
@@ -15,15 +15,16 @@ const Dropdown: React.FC<DropdownProps> = (props) => {
     }
 
     const handleSelect = (item: string | number) => {
-        props.selectItem(props.dataId, item.toString())
+        props.selectItem(props.dataName ?? '', item.toString())
         setIsDropped(false)
     }
 
     return (
         <div className="dropdown">
-            <div>{props.dataId} :</div>
+            {props.dataName && <div>{props.dataName} :</div>}
             <div className={"value" + (isDropped ? " dropped" : "")} onClick={handleClick}>
                 {props.currentValue ?? 'select'}
+                
                 {isDropped && (
                     <ul className="list">
                         {props.items.map((item, key) => (
