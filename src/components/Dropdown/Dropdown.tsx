@@ -4,7 +4,7 @@ interface DropdownProps {
     currentValue?: string | null
     items: (number | string)[]
     dataName?: string
-    selectItem: (id: string, value: string) => void
+    selectItem: (id: string, value: any) => void
 }
 
 const Dropdown: React.FC<DropdownProps> = (props) => {
@@ -15,7 +15,7 @@ const Dropdown: React.FC<DropdownProps> = (props) => {
     }
 
     const handleSelect = (item: string | number) => {
-        props.selectItem(props.dataName ?? '', item.toString())
+        props.selectItem(props.dataName ?? '', item)
         setIsDropped(false)
     }
 

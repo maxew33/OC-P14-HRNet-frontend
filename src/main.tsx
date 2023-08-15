@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client'
 import './style/style.css'
 
 import { atom } from 'jotai'
-import { dataFormat } from './types/datatTypes'
+import { dataFormat } from './types/dataTypes'
 import { App } from './App'
 
 const rootElement = document.getElementById('root')

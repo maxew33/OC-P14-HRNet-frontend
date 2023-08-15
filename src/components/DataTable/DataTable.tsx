@@ -1,19 +1,27 @@
-import React, { useEffect, useState } from 'react'
+import React, { FormEvent, useEffect, useState } from 'react'
 
 import styles from '../../style/DataTable.module.css'
+import Dropdown from '../Dropdown/Dropdown'
 
 interface DataTableProps {
     title?: string
     headingNames?: { [key: string]: string } | null
-    data: object[]
+    data: {[key: string]: string | number }[]
 }
 
 export const DataTable: React.FC<DataTableProps> = (props) => {
-    const { title, headingNames, data } = props
+    const { title, headingNames, data} = props
 
-    const [sortedData, setSortedData] = useState(data)
+    const [displayedData, setDisplayedData] = useState(data)
+
+    const [sortedData, setSortedData] = useState(displayedData)
 
     const [sortedKey, setSortedKey] = useState({ key: '', asc: false })
+
+
+    // ========================================
+    //check if headingNames keys and data keys are the same
+    // ========================================
 
     let namesGiven = headingNames ? Object.values(headingNames) : null
 
@@ -21,7 +29,6 @@ export const DataTable: React.FC<DataTableProps> = (props) => {
 
     const headings: { [key: string]: string } = {}
 
-    //check if headingNames keys and data keys are the same
     if (headingNames) {
         const dataKeysToCompare = data.length > 0 ? dataKeys : []
 
@@ -49,12 +56,12 @@ export const DataTable: React.FC<DataTableProps> = (props) => {
     })
 
     // ========================================
-    //sort data by clicking on the table header
+    // sort data by clicking on the table header
     // ========================================
 
     const handleSort = (key: string) => {
         //je récupère la clé
-        console.log(key)
+        setCurrentPage(1)
 
         sortedKey.key === key
             ? setSortedKey((prevSortedKey) => ({
@@ -65,7 +72,7 @@ export const DataTable: React.FC<DataTableProps> = (props) => {
     }
 
     useEffect(() => {
-        const tmpData = [...data].sort((a: any, b: any) => {
+        const tmpData = [...displayedData].sort((a: any , b: any) => {
             if (a[sortedKey.key] > b[sortedKey.key])
                 return sortedKey.asc ? 1 : -1
             if (a[sortedKey.key] < b[sortedKey.key])
@@ -74,24 +81,28 @@ export const DataTable: React.FC<DataTableProps> = (props) => {
         })
 
         setSortedData(tmpData)
-    }, [sortedKey])
+    }, [sortedKey, displayedData])
 
     // ========================================
-    //
+    // number of entries shown
+    // ========================================
+
+    const [displayingQty, setDisplayingQty] = useState(10)
+    const handleSelectQty = (_id: string, value: number) => {
+        setDisplayingQty(value)
+    }
+
+    // ========================================
+    // Page navigation
     // ========================================
 
     const [currentPage, setCurrentPage] = useState(1)
-    const [displayingQty, setDisplayingQty] = useState(10)
     const [pagesQty, setPagesQty] = useState(0)
 
     useEffect(() => {
-        setPagesQty(Math.ceil(data.length / displayingQty))
+        setPagesQty(Math.ceil(displayedData.length / displayingQty))
         console.log(pagesQty)
-    }, [displayingQty])
-
-    const handleShowDropdown = () => {
-        console.log(123)
-    }
+    }, [displayingQty, displayedData, pagesQty])
 
     const handleSelectPage = (idx: number) => {
         setCurrentPage(idx)
@@ -104,17 +115,68 @@ export const DataTable: React.FC<DataTableProps> = (props) => {
         tempPage > 0 && tempPage <= pagesQty && setCurrentPage(tempPage)
     }
 
+    // ========================================
+    // Searchbar
+    // ========================================
+
+    const [searchInput, setSearchInput] = useState('')
+
+    const handleInput = (e: FormEvent) => {
+        const target = e.target as HTMLFormElement
+        setCurrentPage(1)
+        setSearchInput(target.value)
+    }
+
+    useEffect(()=> {
+        dataSearching(searchInput.toString())
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [searchInput])
+
+    const dataSearching = (word: string) => {
+
+        const searchedWord = word.toLowerCase()
+
+        const tempData: React.SetStateAction<{ [key: string]: any }[]> = []
+
+        props.data.forEach((data) => {
+            const keys : string[] = Object.keys(data)
+            let match = false
+            keys.forEach((key) => {
+                if(!match){
+                    const wordToCompare = data[key].toString().toLowerCase()
+                    if(wordToCompare.match(searchedWord)){
+                        tempData.push(data)
+                        match = true
+                    }
+                }
+        })}
+        )
+
+        setDisplayedData(tempData)
+    }
+
     return (
         <>
             <div>
                 <span>
                     Show
-                    <button onClick={handleShowDropdown}>
-                        {displayingQty}
-                    </button>
-                    [menu déroulant] entries
+                    <Dropdown
+                        items={[10, 25, 50, 100]}
+                        selectItem={handleSelectQty}
+                        currentValue={displayingQty.toString()}
+                    />
+                    entries
                 </span>
-                <span>Search : [zone de recherche]</span>
+                <form>
+                    search
+                    <input
+                        type="text"
+                        name=""
+                        id=""
+                        value={searchInput}
+                        onInput={handleInput}
+                    />
+                </form>
             </div>
             <table className={styles.table}>
                 <caption>{title ?? ''}</caption>
@@ -156,21 +218,24 @@ export const DataTable: React.FC<DataTableProps> = (props) => {
                 <span>
                     Showing {(currentPage - 1) * displayingQty + 1} to{' '}
                     {currentPage === pagesQty
-                        ? data.length
+                        ? displayedData.length
                         : currentPage * displayingQty}{' '}
-                    of {data.length} entries
+                    of {displayedData.length} entries
                 </span>
                 <div>
                     <button onClick={() => handleNavPage(-1)}>prev</button>
                     {Array.from(Array(pagesQty)).map((_, idx) => (
                         <span key={'pageNavigation' + idx}>
-                            {currentPage === idx + 1 ?<span>{idx + 1}</span> :
-                            <button
-                                onClick={() => handleSelectPage(idx + 1)}
-                                key={'pageBtn' + idx}
-                            >
-                                {idx + 1}
-                            </button>}
+                            {currentPage === idx + 1 ? (
+                                <span>{idx + 1}</span>
+                            ) : (
+                                <button
+                                    onClick={() => handleSelectPage(idx + 1)}
+                                    key={'pageBtn' + idx}
+                                >
+                                    {idx + 1}
+                                </button>
+                            )}
                         </span>
                     ))}
                     <button onClick={() => handleNavPage(1)}>next</button>
