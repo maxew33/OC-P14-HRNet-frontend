@@ -48,7 +48,9 @@ export const DataTable: React.FC<DataTableProps> = (props) => {
         headings[data] = headingNamesGot[idx]
     })
 
-    //sort data by clicking on the tbale header
+    // ========================================
+    //sort data by clicking on the table header
+    // ========================================
 
     const handleSort = (key: string) => {
         //je récupère la clé
@@ -59,49 +61,121 @@ export const DataTable: React.FC<DataTableProps> = (props) => {
                   ...prevSortedKey,
                   asc: !prevSortedKey.asc,
               }))
-            : setSortedKey({ key: key, asc: false })        
+            : setSortedKey({ key: key, asc: false })
     }
 
-    useEffect(()=>{
-
+    useEffect(() => {
         const tmpData = [...data].sort((a: any, b: any) => {
-            if (a[sortedKey.key] > b[sortedKey.key]) return (sortedKey.asc ? 1 : -1)
-            if (a[sortedKey.key] < b[sortedKey.key]) return (sortedKey.asc ? -1 : 1)
+            if (a[sortedKey.key] > b[sortedKey.key])
+                return sortedKey.asc ? 1 : -1
+            if (a[sortedKey.key] < b[sortedKey.key])
+                return sortedKey.asc ? -1 : 1
             return 0
         })
 
         setSortedData(tmpData)
-
     }, [sortedKey])
 
+    // ========================================
+    //
+    // ========================================
+
+    const [currentPage, setCurrentPage] = useState(1)
+    const [displayingQty, setDisplayingQty] = useState(10)
+    const [pagesQty, setPagesQty] = useState(0)
+
+    useEffect(() => {
+        setPagesQty(Math.ceil(data.length / displayingQty))
+        console.log(pagesQty)
+    }, [displayingQty])
+
+    const handleShowDropdown = () => {
+        console.log(123)
+    }
+
+    const handleSelectPage = (idx: number) => {
+        setCurrentPage(idx)
+    }
+
+    // navigation form prev / next button
+    const handleNavPage = (dir: number) => {
+        let tempPage = currentPage
+        tempPage += dir
+        tempPage > 0 && tempPage <= pagesQty && setCurrentPage(tempPage)
+    }
+
     return (
-        <table className={styles.table}>
-            <caption>{title ?? ''}</caption>
-            <tbody>
-                <tr>
-                    {Object.keys(headings).map((name: string, idx) => (
-                        <th
-                            scope="col"
-                            key={'col' + idx}
-                            onClick={() => handleSort(name)}
-                        >
-                            {headings[name]} {name === sortedKey.key && (sortedKey.asc ? "▲" : "▼")}
-                        </th>
-                    ))}
-                </tr>
-                {sortedData.map((data, rowIdx) => (
-                    <tr key={'row' + rowIdx + 1}>
-                        {dataKeys.map((key, colIdx) => (
+        <>
+            <div>
+                <span>
+                    Show
+                    <button onClick={handleShowDropdown}>
+                        {displayingQty}
+                    </button>
+                    [menu déroulant] entries
+                </span>
+                <span>Search : [zone de recherche]</span>
+            </div>
+            <table className={styles.table}>
+                <caption>{title ?? ''}</caption>
+                <tbody>
+                    <tr>
+                        {Object.keys(headings).map((name: string, idx) => (
                             <th
                                 scope="col"
-                                key={'row' + rowIdx + 'col' + colIdx}
+                                key={'col' + idx}
+                                onClick={() => handleSort(name)}
                             >
-                                {data[key as keyof typeof data]}
+                                {headings[name]}{' '}
+                                {name === sortedKey.key &&
+                                    (sortedKey.asc ? '▲' : '▼')}
                             </th>
                         ))}
                     </tr>
-                ))}
-            </tbody>
-        </table>
+                    {sortedData.map(
+                        (data, rowIdx) =>
+                            rowIdx >= (currentPage - 1) * displayingQty &&
+                            rowIdx < currentPage * displayingQty && (
+                                <tr key={'row' + rowIdx + 1}>
+                                    {dataKeys.map((key, colIdx) => (
+                                        <th
+                                            scope="col"
+                                            key={
+                                                'row' + rowIdx + 'col' + colIdx
+                                            }
+                                        >
+                                            {data[key as keyof typeof data]}
+                                        </th>
+                                    ))}
+                                </tr>
+                            )
+                    )}
+                </tbody>
+            </table>
+            <div className="">
+                <span>
+                    Showing {(currentPage - 1) * displayingQty + 1} to{' '}
+                    {currentPage === pagesQty
+                        ? data.length
+                        : currentPage * displayingQty}{' '}
+                    of {data.length} entries
+                </span>
+                <div>
+                    <button onClick={() => handleNavPage(-1)}>prev</button>
+                    {Array.from(Array(pagesQty)).map((_, idx) => (
+                        <span key={'pageNavigation' + idx}>
+                            {currentPage === idx + 1 ?<span>{idx + 1}</span> :
+                            <button
+                                onClick={() => handleSelectPage(idx + 1)}
+                                key={'pageBtn' + idx}
+                            >
+                                {idx + 1}
+                            </button>}
+                        </span>
+                    ))}
+                    <button onClick={() => handleNavPage(1)}>next</button>
+                </div>
+            </div>
+        </>
     )
 }
