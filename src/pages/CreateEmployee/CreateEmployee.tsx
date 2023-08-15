@@ -6,7 +6,7 @@ import { department, usStates } from '../../data/dropdownsData'
 import { dataFormat, dataValidationType } from '../../types/datatTypes'
 import { employeesAtom } from '../../main'
 import { useAtom } from 'jotai'
-import { MessageModal } from '../../components/MessageModal'
+import { MessageModal } from '../../components/MessageModal/MessageModal'
 
 const CreateEmployee: React.FC = () => {
     // get / set the data from the global state
