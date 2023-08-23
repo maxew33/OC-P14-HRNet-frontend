@@ -1,4 +1,5 @@
 export interface dataFormat {
+    [key: string]: string | number | null
     firstName: string | null
     lastName: string | null
     birthday: number | null

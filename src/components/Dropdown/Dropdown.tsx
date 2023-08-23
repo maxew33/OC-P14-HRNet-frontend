@@ -4,6 +4,7 @@ interface DropdownProps {
     currentValue?: string | null
     items: (number | string)[]
     dataName?: string
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     selectItem: (id: string, value: any) => void
 }
 

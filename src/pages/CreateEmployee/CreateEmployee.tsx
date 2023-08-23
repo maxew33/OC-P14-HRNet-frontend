@@ -1,12 +1,13 @@
 import React, { FormEvent, useEffect, useState } from 'react'
 import Header from '../../components/Header/Header'
 import { NavLink } from 'react-router-dom'
-import Dropdown from '../../components/Dropdown/Dropdown'
+// import Dropdown from '../../components/Dropdown/Dropdown'
 import { department, usStates } from '../../data/dropdownsData'
 import { dataFormat, dataValidationType } from '../../types/dataTypes'
 import { employeesAtom } from '../../main'
 import { useAtom } from 'jotai'
-import { MessageModal } from '../../components/MessageModal/MessageModal'
+// import { MessageModal } from '../../components/MessageModal/MessageModal'
+import { Dropdown, Modal } from 'hrnet-maxew-library'
 
 const CreateEmployee: React.FC = () => {
     // get / set the data from the global state
@@ -26,7 +27,7 @@ const CreateEmployee: React.FC = () => {
     })
 
     // when the form is submitted, check if the form are correctly filled
-    
+
     const [dataSubmitted, setDataSubmitted] = useState(false)
 
     const [dataValidation, setDataValidation] = useState<dataValidationType>({
@@ -42,7 +43,6 @@ const CreateEmployee: React.FC = () => {
     })
 
     const [dataValidated, setDataValidated] = useState(false)
-
 
     const handleInput = (e: FormEvent, id: string) => {
         const target = e.target as HTMLFormElement
@@ -82,7 +82,6 @@ const CreateEmployee: React.FC = () => {
     }
 
     const clearData = () => {
-
         setDataValidated(false)
 
         setInputData({
@@ -221,6 +220,10 @@ const CreateEmployee: React.FC = () => {
                                 items={usStates}
                                 dataName="state"
                                 selectItem={selectItem}
+                                lBg="#93AD18"
+                                lBordC="#93AD18"
+                                fFam="Rosarivo"
+                                underline={true}
                             />
                         </div>
                         <div
@@ -276,13 +279,34 @@ const CreateEmployee: React.FC = () => {
                     </button>
                 </form>
                 {dataSubmitted && (
-                    <MessageModal
+                    <Modal
                         message={
                             dataValidated
                                 ? `${inputData.firstName} ${inputData.lastName} has been added`
-                                : `red field${Object.values(dataValidation).filter((value) => value === false).length > 1 ? 's' : ''} ${Object.values(dataValidation).filter((value) => value === false).length > 1 ? 'were' : 'was'} not filled properly.`
+                                : `red field${
+                                      Object.values(dataValidation).filter(
+                                          (value) => value === false
+                                      ).length > 1
+                                          ? 's'
+                                          : ''
+                                  } ${
+                                      Object.values(dataValidation).filter(
+                                          (value) => value === false
+                                      ).length > 1
+                                          ? 'were'
+                                          : 'was'
+                                  } not filled properly.`
                         }
                         confirm={handleConfirm}
+                        overlay={true}
+                        fFam="Montserrat"
+                        bordC="#93AD18"
+                        bordW="5px"
+                        bordR="5px"
+                        pad="15px"
+                        bbordR='4px'
+                        bbordC='#93AD18'
+                        bbordW='4px'
                     />
                 )}
             </main>

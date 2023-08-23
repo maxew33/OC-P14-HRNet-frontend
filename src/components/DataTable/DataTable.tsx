@@ -60,7 +60,7 @@ export const DataTable: React.FC<DataTableProps> = (props) => {
     // ========================================
 
     const handleSort = (key: string) => {
-        //je récupère la clé
+        // get the column key
         setCurrentPage(1)
 
         sortedKey.key === key
@@ -88,6 +88,7 @@ export const DataTable: React.FC<DataTableProps> = (props) => {
     // ========================================
 
     const [displayingQty, setDisplayingQty] = useState(10)
+    
     const handleSelectQty = (_id: string, value: number) => {
         setDisplayingQty(value)
     }
