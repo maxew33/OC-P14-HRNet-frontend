@@ -15,15 +15,15 @@ const CreateEmployee: React.FC = () => {
 
     // get / set the data from the form
     const [inputData, setInputData] = useState<dataFormat>({
-        firstName: null,
-        lastName: null,
-        startDate: null,
-        department: null,
-        birthday: null,
-        street: null,
-        city: null,
-        state: null,
-        zipCode: null,
+        firstName: '',
+        lastName: '',
+        startDate: 0,
+        department: '',
+        birthday: 0,
+        street: '',
+        city: '',
+        state: '',
+        zipCode: 0,
     })
 
     // when the form is submitted, check if the form are correctly filled
@@ -85,15 +85,15 @@ const CreateEmployee: React.FC = () => {
         setDataValidated(false)
 
         setInputData({
-            firstName: null,
-            lastName: null,
-            startDate: null,
-            department: null,
-            birthday: null,
-            street: null,
-            city: null,
-            state: null,
-            zipCode: null,
+            firstName: '',
+            lastName: '',
+            startDate: 0,
+            department: '',
+            birthday: 0,
+            street: '',
+            city: '',
+            state: '',
+            zipCode: 0,
         })
 
         setDataValidation({

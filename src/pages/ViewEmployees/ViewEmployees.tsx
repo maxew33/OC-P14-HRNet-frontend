@@ -5,6 +5,7 @@ import { NavLink } from 'react-router-dom'
 import { useAtom } from 'jotai'
 import { employeesAtom } from '../../main'
 import { DataTable } from '../../components/DataTable/DataTable'
+import { Table } from 'hrnet-maxew-library'
 
 const ViewEmployees: React.FC = () => {
     const [employees] = useAtom(employeesAtom)
@@ -32,7 +33,8 @@ const ViewEmployees: React.FC = () => {
                 </NavLink>
                 <div className="content-wrapper">
                     <h2 className="wrapper-title">View employees</h2>
-                    <DataTable headingNames={names} data={employees} />
+                    <Table headingNames={names} data={employees}/>
+                    {/* <DataTable headingNames={names} data={employees} /> */}
                 </div>
             </main>
         </>
