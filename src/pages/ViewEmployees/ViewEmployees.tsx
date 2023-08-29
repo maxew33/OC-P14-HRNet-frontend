@@ -22,8 +22,6 @@ const ViewEmployees: React.FC = () => {
         zipCode: 'Zip Code',
     }
 
-    console.log(employees)
-
     return (
         <>
             <Header />
@@ -32,8 +30,14 @@ const ViewEmployees: React.FC = () => {
                     Create employee
                 </NavLink>
                 <div className="content-wrapper">
-                    <h2 className="wrapper-title">View employees</h2>
-                    <Table headingNames={names} data={employees}/>
+                    {employees.length !== 0 ?
+                        <>
+                            <h2 className="wrapper-title">View employees</h2>
+                            <Table headingNames={names} data={employees} />
+                        </>
+                        :
+                        <>No employee yet</>
+                    }
                     {/* <DataTable headingNames={names} data={employees} /> */}
                 </div>
             </main>

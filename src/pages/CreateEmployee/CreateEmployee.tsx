@@ -8,6 +8,7 @@ import { employeesAtom } from '../../main'
 import { useAtom } from 'jotai'
 // import { MessageModal } from '../../components/MessageModal/MessageModal'
 import { Dropdown, Modal } from 'hrnet-maxew-library'
+import addNewEmployee from '../../services/addNewEmployee'
 
 const CreateEmployee: React.FC = () => {
     // get / set the data from the global state
@@ -17,9 +18,9 @@ const CreateEmployee: React.FC = () => {
     const [inputData, setInputData] = useState<dataFormat>({
         firstName: '',
         lastName: '',
-        startDate: 0,
+        startDate: Date.now(),
         department: '',
-        birthday: 0,
+        birthday: Date.now(),
         street: '',
         city: '',
         state: '',
@@ -66,6 +67,10 @@ const CreateEmployee: React.FC = () => {
         }
 
         setDataValidation({ ...dataValidation, ...updatedValidationData })
+        
+        console.log(1, inputData, 2, JSON.stringify(inputData), 3, JSON.stringify({data: inputData}))
+
+        addNewEmployee(inputData)
 
         finalValidation.every((value) => value === true)
             ? validateData()
@@ -109,10 +114,10 @@ const CreateEmployee: React.FC = () => {
         })
     }
 
-    const handleConfirm = (e: FormEvent) => {
-        e.preventDefault()
+    // when i click on 'ok' button
+    const handleConfirm = () => {
 
-        dataValidated && clearData()
+        dataValidated  && clearData()
 
         setDataSubmitted(false)
     }
