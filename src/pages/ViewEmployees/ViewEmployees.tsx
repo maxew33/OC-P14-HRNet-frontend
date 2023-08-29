@@ -30,15 +30,16 @@ const ViewEmployees: React.FC = () => {
                     Create employee
                 </NavLink>
                 <div className="content-wrapper">
-                    {employees.length !== 0 ?
+                    <h2 className="wrapper-title">View employees</h2>
+                    {employees.length !== 0 ? (
                         <>
-                            <h2 className="wrapper-title">View employees</h2>
-                            <Table headingNames={names} data={employees} />
+                        <Table headingNames={names} data={employees} />
+                        <DataTable headingNames={names} data={employees} />
                         </>
-                        :
-                        <>No employee yet</>
-                    }
-                    {/* <DataTable headingNames={names} data={employees} /> */}
+                    ) : (
+                        'No employee yet'
+                    )}
+                    
                 </div>
             </main>
         </>

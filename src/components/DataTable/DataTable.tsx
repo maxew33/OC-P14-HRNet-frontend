@@ -1,7 +1,8 @@
 import React, { FormEvent, useEffect, useState } from 'react'
 
 import styles from '../../style/DataTable.module.css'
-import Dropdown from '../Dropdown/Dropdown'
+import { Dropdown } from 'hrnet-maxew-library'
+// import Dropdown from '../Dropdown/Dropdown'
 
 interface DataTableProps {
     title?: string
@@ -91,6 +92,7 @@ export const DataTable: React.FC<DataTableProps> = (props) => {
     
     const handleSelectQty = (_id: string, value: number) => {
         setDisplayingQty(value)
+        setCurrentPage(1)
     }
 
     // ========================================
@@ -158,13 +160,14 @@ export const DataTable: React.FC<DataTableProps> = (props) => {
 
     return (
         <>
-            <div>
-                <span>
+            <div className={styles.entriesDisplayed}>
+                <span className={styles.dropdown}>
                     Show
                     <Dropdown
                         items={[10, 25, 50, 100]}
                         selectItem={handleSelectQty}
                         currentValue={displayingQty.toString()}
+                        width="75px"
                     />
                     entries
                 </span>
@@ -179,6 +182,7 @@ export const DataTable: React.FC<DataTableProps> = (props) => {
                     />
                 </form>
             </div>
+
             <table className={styles.table}>
                 <caption>{title ?? ''}</caption>
                 <tbody>
@@ -201,21 +205,22 @@ export const DataTable: React.FC<DataTableProps> = (props) => {
                             rowIdx < currentPage * displayingQty && (
                                 <tr key={'row' + rowIdx + 1}>
                                     {dataKeys.map((key, colIdx) => (
-                                        <th
+                                        <td
                                             scope="col"
                                             key={
                                                 'row' + rowIdx + 'col' + colIdx
                                             }
                                         >
                                             {data[key as keyof typeof data]}
-                                        </th>
+                                        </td>
                                     ))}
                                 </tr>
                             )
                     )}
                 </tbody>
             </table>
-            <div className="">
+
+            <div className={styles.navigation}>
                 <span>
                     Showing {(currentPage - 1) * displayingQty + 1} to{' '}
                     {currentPage === pagesQty

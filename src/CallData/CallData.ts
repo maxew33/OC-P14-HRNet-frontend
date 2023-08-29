@@ -8,13 +8,12 @@ export default class CallData{
     }
 
     async getEmployeesData() {
-        // return import.meta.env.PROD
-        return import.meta.env.DEV
+        return import.meta.env.PROD
+        // return import.meta.env.DEV
             ? fetch(this._url)
                   .then((res) => {
                     console.log('connected')
                     // console.log(res.json())
-                    return (res.json() ?? data)
                     return res.json()
                 })
                   .catch((err) => {

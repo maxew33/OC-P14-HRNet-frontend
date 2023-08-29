@@ -1,7 +1,33 @@
-.table {
-  border: 2px solid red;
-  width: 100%;
+.entriesDisplayed, .navigation {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
-.table th, .table td {
-  border: 1px solid green;
+
+.dropdown {
+  display: flex;
+  gap: 2px;
+}
+
+.table {
+  border-collapse: collapse;
+  border-spacing: 0;
+  border: 1px solid black;
+  width: 100%;
+  margin: 1rem 0;
+}
+
+.table th {
+  background: gainsboro;
+  font-weight: bold;
+}
+
+.table th,
+.table td {
+  border: 1px solid gray;
+  padding: 3px;
+}
+
+.table tr:nth-child(odd) {
+  background: whitesmoke;
 }/*# sourceMappingURL=DataTable.module.css.map */
