@@ -34,6 +34,7 @@ const ViewEmployees: React.FC = () => {
                     {employees.length !== 0 ? (
                         <>
                         <Table headingNames={names} data={employees} />
+                        <br/><br/><br/><br/><br/>
                         <DataTable headingNames={names} data={employees} />
                         </>
                     ) : (

@@ -70,16 +70,16 @@ const CreateEmployee: React.FC = () => {
         
         console.log(1, inputData, 2, JSON.stringify(inputData), 3, JSON.stringify({data: inputData}))
 
-        addNewEmployee(inputData)
-
         finalValidation.every((value) => value === true)
             ? validateData()
             : setDataSubmitted(true)
     }
 
-    //data are validated => update the global state
+    //data are validated => update the global state and the bdd
     const validateData = async () => {
         setEmployees([...employees, inputData])
+        
+        addNewEmployee(inputData)
 
         setDataValidated(true)
 
@@ -221,12 +221,16 @@ const CreateEmployee: React.FC = () => {
                             }
                         >
                             <Dropdown
-                                currentValue={inputData.state}
+                                currentValue={inputData.state !== '' ? inputData.state: 'select'}
                                 items={usStates}
                                 dataName="state"
+                                dataLabel="State"
+                                fSize="1rem"
+                                height= "3rem"
                                 selectItem={selectItem}
                                 lBg="#93AD18"
                                 lBordC="#93AD18"
+                                lBordW='2px'
                                 fFam="Rosarivo"
                                 underline={true}
                             />
@@ -272,9 +276,14 @@ const CreateEmployee: React.FC = () => {
                             }
                         >
                             <Dropdown
-                                currentValue={inputData.department}
+                                currentValue={inputData.department !== '' ? inputData.department : 'select department'}
                                 items={department}
                                 dataName="department"
+                                dataLabel='Department'
+                                height='3rem'
+                                fFam="Rosarivo"
+                                fSize='1rem'
+                                lBordC='#93AD18'
                                 selectItem={selectItem}
                             />
                         </div>
@@ -287,8 +296,8 @@ const CreateEmployee: React.FC = () => {
                     <Modal
                         message={
                             dataValidated
-                                ? `${inputData.firstName} ${inputData.lastName} has been added`
-                                : `red field${
+                                ? [`${inputData.firstName} ${inputData.lastName} has been added`]
+                                : [`Red field${
                                       Object.values(dataValidation).filter(
                                           (value) => value === false
                                       ).length > 1
@@ -300,18 +309,23 @@ const CreateEmployee: React.FC = () => {
                                       ).length > 1
                                           ? 'were'
                                           : 'was'
-                                  } not filled properly.`
+                                  } not filled properly.`]
                         }
                         confirm={handleConfirm}
                         overlay={true}
                         fFam="Montserrat"
+                        fSize='2rem'
                         bordC="#93AD18"
                         bordW="5px"
-                        bordR="5px"
+                        bordR="15px"
                         pad="15px"
-                        bbordR='4px'
+                        bbordR='12px'
                         bbordC='#93AD18'
                         bbordW='4px'
+                        bbg='#93AD18'
+                        bfCol='white'
+                        hoverBg='whitesmoke'
+                        hoverCol='#93AD18'
                     />
                 )}
             </main>

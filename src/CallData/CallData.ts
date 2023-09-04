@@ -12,8 +12,6 @@ export default class CallData{
         // return import.meta.env.DEV
             ? fetch(this._url)
                   .then((res) => {
-                    console.log('connected')
-                    // console.log(res.json())
                     return res.json()
                 })
                   .catch((err) => {

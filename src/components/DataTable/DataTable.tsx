@@ -1,4 +1,4 @@
-import React, { FormEvent, useEffect, useState } from 'react'
+import React, { FormEvent, Fragment, useEffect, useState } from 'react'
 
 import styles from '../../style/DataTable.module.css'
 import { Dropdown } from 'hrnet-maxew-library'
@@ -7,18 +7,17 @@ import { Dropdown } from 'hrnet-maxew-library'
 interface DataTableProps {
     title?: string
     headingNames?: { [key: string]: string } | null
-    data: {[key: string]: string | number }[]
+    data: { [key: string]: string | number }[]
 }
 
 export const DataTable: React.FC<DataTableProps> = (props) => {
-    const { title, headingNames, data} = props
+    const { title, headingNames, data } = props
 
     const [displayedData, setDisplayedData] = useState(data)
 
     const [sortedData, setSortedData] = useState(displayedData)
 
     const [sortedKey, setSortedKey] = useState({ key: '', asc: false })
-
 
     // ========================================
     //check if headingNames keys and data keys are the same
@@ -73,7 +72,7 @@ export const DataTable: React.FC<DataTableProps> = (props) => {
     }
 
     useEffect(() => {
-        const tmpData = [...displayedData].sort((a: any , b: any) => {
+        const tmpData = [...displayedData].sort((a: any, b: any) => {
             if (a[sortedKey.key] > b[sortedKey.key])
                 return sortedKey.asc ? 1 : -1
             if (a[sortedKey.key] < b[sortedKey.key])
@@ -89,7 +88,7 @@ export const DataTable: React.FC<DataTableProps> = (props) => {
     // ========================================
 
     const [displayingQty, setDisplayingQty] = useState(10)
-    
+
     const handleSelectQty = (_id: string, value: number) => {
         setDisplayingQty(value)
         setCurrentPage(1)
@@ -130,30 +129,29 @@ export const DataTable: React.FC<DataTableProps> = (props) => {
         setSearchInput(target.value)
     }
 
-    useEffect(()=> {
+    useEffect(() => {
         dataSearching(searchInput.toString())
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [searchInput])
 
     const dataSearching = (word: string) => {
-
         const searchedWord = word.toLowerCase()
 
         const tempData: React.SetStateAction<{ [key: string]: any }[]> = []
 
         props.data.forEach((data) => {
-            const keys : string[] = Object.keys(data)
+            const keys: string[] = Object.keys(data)
             let match = false
             keys.forEach((key) => {
-                if(!match){
+                if (!match) {
                     const wordToCompare = data[key].toString().toLowerCase()
-                    if(wordToCompare.match(searchedWord)){
+                    if (wordToCompare.match(searchedWord)) {
                         tempData.push(data)
                         match = true
                     }
                 }
-        })}
-        )
+            })
+        })
 
         setDisplayedData(tempData)
     }
@@ -171,6 +169,8 @@ export const DataTable: React.FC<DataTableProps> = (props) => {
                     />
                     entries
                 </span>
+
+                <h2>Component</h2>
                 <form>
                     search
                     <input
@@ -228,23 +228,63 @@ export const DataTable: React.FC<DataTableProps> = (props) => {
                         : currentPage * displayingQty}{' '}
                     of {displayedData.length} entries
                 </span>
-                <div>
-                    <button onClick={() => handleNavPage(-1)}>prev</button>
+
+                <div className={styles.pageSelection}>
+
+                    <button
+                        className={currentPage === 1 ? styles.disabled : ''}
+                        onClick={() => handleNavPage(-1)}
+                    >
+                        prev
+                    </button>
+
+{/* page selection */}
+
                     {Array.from(Array(pagesQty)).map((_, idx) => (
-                        <span key={'pageNavigation' + idx}>
-                            {currentPage === idx + 1 ? (
-                                <span>{idx + 1}</span>
-                            ) : (
+                        <Fragment key={'pageNavigation' + idx}>                            
+                            {
+                            (pagesQty < 7) 
+                            || 
+                            (Math.abs(currentPage - idx - 1) < 3) 
+                            || 
+                            (currentPage <= 2 && idx <= 4) 
+                            || 
+                            (currentPage >= pagesQty - 2 && idx > pagesQty - 6) 
+                            || 
+                            (idx === 0 || idx === pagesQty - 1) ?
+                            currentPage === idx + 1 ? (
+                                <span className={styles.currentPage}>{idx + 1}</span>
+                            ) 
+                            : 
                                 <button
                                     onClick={() => handleSelectPage(idx + 1)}
+                                    className={styles.otherPage}
                                     key={'pageBtn' + idx}
                                 >
                                     {idx + 1}
                                 </button>
-                            )}
-                        </span>
+                            
+                            :   
+                                (currentPage - 3 === idx + 1 
+                                || 
+                                currentPage + 3 === idx + 1 
+                                || 
+                                (currentPage <= 2 && idx === 5) 
+                                || 
+                                (currentPage >= pagesQty - 2 && idx > pagesQty - 7)) &&
+                                <span className={styles.currentPage}>...</span>
+                            }
+                        </Fragment>
                     ))}
-                    <button onClick={() => handleNavPage(1)}>next</button>
+
+                    <button
+                        className={
+                            currentPage === pagesQty ? styles.disabled : ''
+                        }
+                        onClick={() => handleNavPage(1)}
+                    >
+                        next
+                    </button>
                 </div>
             </div>
         </>
