@@ -23,13 +23,29 @@ form.content-wrapper {
     height: calc(12vh - 2rem);
     background: $white;
     border-radius: 1.4rem;
-    label {
+
+    * {
         font-family: $font2;
+
+        font-size: 1rem;
     }
+
     input {
+        width: 100%;
         border: none;
         border-bottom: 2px solid $mediumGreen;
         height: 1rem;
+    }
+
+    button {
+        padding: unset;
+        top: -2px;
+        right: -2px;
+        &::after {
+            background: black;
+            height: 0.75rem;
+            width: 0.75rem;
+        }
     }
 }
 
@@ -134,7 +150,7 @@ form.content-wrapper {
         flex-wrap: wrap;
         justify-content: center;
         grid-area: address;
-        & div{
+        & div {
             min-width: 35%;
         }
     }
@@ -144,5 +160,4 @@ form.content-wrapper {
         margin: auto;
         aspect-ratio: 4;
     }
-    
 }

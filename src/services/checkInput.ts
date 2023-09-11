@@ -1,4 +1,4 @@
-export default function checkInput(type: string, value: string | number | null) {
+export default function checkInput(type: string, value: Date | string | number | null) {
     const validation = {
         status: true,
         reason: '',

@@ -2,12 +2,12 @@ export interface dataFormat {
     [key: string]: string | number | null
     firstName: string | null
     lastName: string | null
-    birthday: number | null
+    birthday: string | null
     street: string | null
     city: string | null
     state: string | null
     zipCode: number | null
-    startDate: number | null
+    startDate: string | null
     department: string | null
 }
 

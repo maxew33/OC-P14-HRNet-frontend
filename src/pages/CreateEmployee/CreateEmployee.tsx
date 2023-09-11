@@ -1,4 +1,4 @@
-import React, { FormEvent, useState } from 'react'
+import React, { FormEvent, useEffect, useState } from 'react'
 import Header from '../../components/Header/Header'
 import { NavLink } from 'react-router-dom'
 import { department, usStates } from '../../data/dropdownsData'
@@ -6,8 +6,11 @@ import { dataErrorType, dataFormat } from '../../types/dataTypes'
 import { employeesAtom } from '../../main'
 import { useAtom } from 'jotai'
 import { Dropdown, Modal } from 'hrnet-maxew-library'
+import DatePicker from 'react-datepicker'
+import 'react-datepicker/dist/react-datepicker.css'
 import addNewEmployee from '../../services/addNewEmployee'
 import checkInput from '../../services/checkInput'
+import formatDate from '../../services/formatDate'
 
 const CreateEmployee: React.FC = () => {
     // get / set the data from the global state
@@ -129,6 +132,29 @@ const CreateEmployee: React.FC = () => {
         setDataSubmitted(false)
     }
 
+    // Date picker
+
+    const today = new Date()
+
+    type dateFormat = {
+        birthday: null | Date
+        startDate: null | Date
+    }
+
+    const [dateSelected, setDateSelected] = useState<dateFormat>({
+        birthday: null,
+        startDate: null,
+    })
+
+    const selectDateHandler = (d: Date, id: string) => {
+        setDateSelected({ ...dateSelected, [id]: d })
+        setInputData({ ...inputData, [id]: formatDate(d) })
+    }
+
+    useEffect(() => {
+        console.log(inputData)
+    }, [inputData])
+
     return (
         <>
             <Header />
@@ -178,13 +204,23 @@ const CreateEmployee: React.FC = () => {
                             }
                         >
                             <label htmlFor="birthdate"> Date of birth : </label>
-                            <input
-                                value={inputData.birthday ?? ''}
-                                type="date"
-                                name=""
-                                id="birthdate"
-                                onInput={(e) => handleInput(e, 'birthday')}
-                                required
+                            <DatePicker
+                                selected={dateSelected.birthday}
+                                onChange={(d: Date) =>
+                                    selectDateHandler(d, 'birthday')
+                                }
+                                maxDate={
+                                    new Date(
+                                        today.getFullYear() - 18,
+                                        today.getMonth(),
+                                        today.getDate()
+                                    )
+                                }
+                                dateFormat="yyyy/MM/dd"
+                                placeholderText="Select a date"
+                                isClearable
+                                name="birthday"
+                                id="birthday"
                             />
                         </div>
                     </div>
@@ -270,13 +306,18 @@ const CreateEmployee: React.FC = () => {
                             }
                         >
                             <label htmlFor="start">Start date : </label>
-                            <input
-                                value={inputData.startDate ?? ''}
-                                type="date"
-                                name=""
+                            <DatePicker
+                                selected={dateSelected.startDate}
+                                onChange={(d: Date) =>
+                                    selectDateHandler(d, 'startDate')
+                                }
+                                maxDate={today}
+                                dateFormat="yyyy/MM/dd"
+                                todayButton={'Today'}
+                                placeholderText="Select a date"
+                                isClearable
+                                name="start"
                                 id="start"
-                                onInput={(e) => handleInput(e, 'startDate')}
-                                required
                             />
                         </div>
                         <div
