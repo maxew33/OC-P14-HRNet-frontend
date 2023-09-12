@@ -33,7 +33,7 @@ La partie backend se trouve dans le repository suivant : [backend](https://githu
 
 ## Aperçu
 
--   ![snapshot](https://zupimages.net/up/23/37/ogo2.png)
+![snapshot](https://zupimages.net/up/23/37/ogo2.png)
 
 ## Author
 
