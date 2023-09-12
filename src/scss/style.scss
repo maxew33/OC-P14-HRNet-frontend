@@ -42,3 +42,19 @@ body {
         font-size: 12px;
     }
 }
+
+@media screen and (max-width: 600px) {
+    body {    
+        main {
+            gap: 1.5rem;
+        }
+    }
+
+    .link {
+        align-self: center;
+        padding: 0.5rem 1rem;
+        font-size: 1.15rem;
+        margin: 2.5vh 0;
+        align-self: flex-start;
+    }
+}

@@ -161,3 +161,48 @@ form.content-wrapper {
         aspect-ratio: 4;
     }
 }
+
+@media screen and (max-width: 600px) {
+    .logoWrapper {
+        display: none;
+    }
+    .appName {
+        font-size: 15vw;
+    }
+    .exit {
+        font-size: 10vw;
+    }
+
+    form.content-wrapper {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .inputs-wrapper{
+        flex-direction: column;
+        margin: auto;
+        flex-wrap: nowrap;
+        width: 100%;
+    }
+
+    .input-wrapper{
+        width: 100%;
+    }
+
+    .address-infos {
+        position: relative;
+        height: unset;
+        justify-content: space-evenly;
+        background: unset;
+        padding: unset;
+        gap: 1rem;
+        &::after {
+            display: none;
+        }
+    }
+
+    .create-btn {
+        font-size: 1.25rem;
+        border-width: 2px;
+    }
+}
