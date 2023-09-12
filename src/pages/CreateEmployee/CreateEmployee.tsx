@@ -121,6 +121,11 @@ const CreateEmployee: React.FC = () => {
             state: null,
             zipCode: null,
         })
+
+        setDateSelected({
+            birthday: null,
+            startDate: null,
+        })
     }
 
     // when I click on 'ok' button
@@ -144,9 +149,9 @@ const CreateEmployee: React.FC = () => {
         startDate: null,
     })
 
-    const selectDateHandler = (d: Date, id: string) => {
-        setDateSelected({ ...dateSelected, [id]: d })
-        setInputData({ ...inputData, [id]: formatDate(d) })
+    const selectDateHandler = (date: Date | null, id: string) => {
+        setDateSelected({ ...dateSelected, [id]: date })
+        date && setInputData({ ...inputData, [id]: formatDate(date) })
     }
 
     return (
@@ -197,7 +202,7 @@ const CreateEmployee: React.FC = () => {
                                 (dataError.birthday ? ' error' : '')
                             }
                         >
-                            <label htmlFor="birthdate"> Date of birth : </label>
+                            <label htmlFor="birthday"> Date of birth : </label>
                             <DatePicker
                                 selected={dateSelected.birthday}
                                 onChange={(d: Date) =>
